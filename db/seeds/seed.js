@@ -72,13 +72,9 @@ async function	seed ({ topicData, userData, articleData, commentData })
 	const	articleResult = await db.query(insertArticles);
 	const	articlesLookupObj = createLookupObj(articleResult.rows, "title", "article_id");
 
-	for (let comment of commentData)
-	{
-		comment.article_id = articlesLookupObj[comment.article_title];
-	}
 	const	commentsValues = commentData.map((comment) =>
 	{
-		return ([comment.article_id, comment.body, comment.votes, comment.author, comment.created_at])
+		return ([articlesLookupObj[comment.article_title], comment.body, comment.votes, comment.author, comment.created_at])
 	})
 	const	insertComments = format(`INSERT INTO comments (article_id, body, votes, author, created_at) VALUES %L`, commentsValues);
 	await db.query(insertComments);
