@@ -1,4 +1,4 @@
-const	createLookupObj = require("../seed-utils.js");
+const	createLookupObj = require("../../db/seeds/seed-utils.js");
 
 describe("createLookupObj", () =>
 {
