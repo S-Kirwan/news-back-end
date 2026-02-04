@@ -4,6 +4,16 @@ const	data = require("../../db/data/test-data/");
 const	app = require("../../app.js");
 const	db = require("../../db/connection.js");
 
+beforeEach(() =>
+{
+	return (seed(data));
+});
+
+afterAll(() =>
+{
+	return (db.end());
+});
+
 describe("/api/topics/", () =>
 {
 	test("GET /api/topics", async () =>
