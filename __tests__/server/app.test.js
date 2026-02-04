@@ -16,7 +16,7 @@ afterAll(() =>
 
 describe("/api/topics/", () =>
 {
-	test("GET /api/topics", async () =>
+	test("GET", async () =>
 	{
 		const { body } = await request(app)
 			.get("/api/topics")
@@ -36,7 +36,7 @@ describe("/api/topics/", () =>
 
 describe("/api/articles/", () =>
 {
-	test("GET /api/articles", async () =>
+	test("GET", async () =>
 	{
 		const { body } = await request(app)
 			.get("/api/articles")
@@ -69,7 +69,7 @@ describe("/api/articles/", () =>
 
 describe("/api/users/", () =>
 {
-	test("GET /api/users", async () =>
+	test("GET", async () =>
 	{
 		const { body } = await request(app)
 			.get("/api/users")
@@ -88,7 +88,7 @@ describe("/api/users/", () =>
 
 describe("/api/articles/:article_id", () =>
 {
-	test.skip("GET /api/articles/:article_id", async () =>
+	test("GET, requested article_id exists", async () =>
 	{
 		const { body } = await request(app)
 			.get("/api/articles/3")
@@ -107,5 +107,15 @@ describe("/api/articles/:article_id", () =>
 		expect(typeof article.topic).toBe("string");
 		expect(typeof article.votes).toBe("number");
 		expect(typeof article.body).toBe("string");
+	});
+	test("GET, requested article_id does not exist", async () =>
+	{
+		const { body } = await request(app)
+			.get("/api/articles/5000")
+			.expect(404);
+
+		const { error } = body;
+
+		expect(error).toBe("Article_id not found");
 	});
 });

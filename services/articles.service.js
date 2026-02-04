@@ -1,4 +1,4 @@
-const	{ fetchAllArticles, fetchAllArticlesFormatted } = require("../models/articles.model.js");
+const	{ fetchAllArticles, fetchAllArticlesFormatted, fetchArticleById } = require("../models/articles.model.js");
 
 exports.retrieveAllArticles = async () =>
 {
@@ -17,3 +17,13 @@ exports.retrieveAllArticlesFormatted = async () =>
 	}
 	return (formattedArticles);
 };
+
+exports.retrieveArticleById = async (requestedId) =>
+{
+	const	article = await fetchArticleById(requestedId);
+
+	if (article === undefined)
+		return (null);
+	else
+		return (article);
+}

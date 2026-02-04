@@ -28,3 +28,15 @@ exports.fetchAllArticlesFormatted = async () =>
 	);
 	return (formattedArticles.rows);
 };
+
+exports.fetchArticleById = async (requestedId) =>
+{
+	const	article = await db.query(
+		`
+			SELECT * FROM articles
+			WHERE article_id = $1
+		`, [requestedId]
+	);
+
+	return (article.rows[0]);
+}
