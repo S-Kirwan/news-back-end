@@ -8,9 +8,9 @@ const	usersRouter = require("./routes/users.route.js");
 
 app.use(express.json());
 
-app.use("/api/articles", articlesRouter);
-app.use("/api/comments", commentsRouter);
+// app.use("/api/articles", articlesRouter);
+// app.use("/api/comments", commentsRouter);
 app.use("/api/topics", topicsRouter);
-app.use("/api/users", usersRouter);
+// app.use("/api/users", usersRouter);
 
 module.exports = app;
