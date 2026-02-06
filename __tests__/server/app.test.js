@@ -14,6 +14,21 @@ afterAll(() =>
 	return (db.end());
 });
 
+describe("Generic bad url - unhandled endpoint", () =>
+{
+	test("Returns 404 - not found on endpoint not routed", async () =>
+	{
+		const	badPath = "/abc/pharmaceutical";
+
+		const	{ body } = await request(app)
+			.get(badPath)
+			.expect(404);
+
+		const	{ error } = body;
+		expect(error).toBe(`${badPath} Not Found`);
+	});
+});
+
 describe("/api/topics/", () =>
 {
 	test("GET", async () =>
