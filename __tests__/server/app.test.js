@@ -18,7 +18,7 @@ describe("/api/topics/", () =>
 {
 	test("GET", async () =>
 	{
-		const { body } = await request(app)
+		const	{ body } = await request(app)
 			.get("/api/topics")
 			.expect(200);
 
@@ -38,7 +38,7 @@ describe("/api/articles/", () =>
 {
 	test("GET", async () =>
 	{
-		const { body } = await request(app)
+		const	{ body } = await request(app)
 			.get("/api/articles")
 			.expect(200);
 
@@ -71,11 +71,11 @@ describe("/api/users/", () =>
 {
 	test("GET", async () =>
 	{
-		const { body } = await request(app)
+		const	{ body } = await request(app)
 			.get("/api/users")
 			.expect(200);
 
-		const { users } = body;
+		const	{ users } = body;
 
 		for (let user of users)
 		{
@@ -90,11 +90,11 @@ describe("/api/articles/:article_id", () =>
 {
 	test("GET, requested article_id exists", async () =>
 	{
-		const { body } = await request(app)
+		const	{ body } = await request(app)
 			.get("/api/articles/3")
 			.expect(200);
 
-		const { article } = body;
+		const	{ article } = body;
 
 		expect(typeof article).toBe("object");
 		expect(Array.isArray(article)).toBe(false);
@@ -110,12 +110,22 @@ describe("/api/articles/:article_id", () =>
 	});
 	test("GET, requested article_id does not exist", async () =>
 	{
-		const { body } = await request(app)
+		const	{ body } = await request(app)
 			.get("/api/articles/5000")
 			.expect(404);
 
 		const { error } = body;
 
-		expect(error).toBe("Article_id not found");
+		expect(error).toBe("article_id not found");
+	});
+	test("GET, invalid article_id", async () =>
+	{
+		const	{ body } = await request(app)
+			.get("/api/articles/pineapple")
+			.expect(400);
+
+		const	{ error } = body;
+
+		expect(error).toBe("Bad Request - Invalid article_id");
 	});
 });
