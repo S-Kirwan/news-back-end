@@ -22,8 +22,5 @@ exports.retrieveArticleById = async (requestedId) =>
 {
 	const	article = await fetchArticleById(requestedId);
 
-	if (article === undefined)
-		return (null);
-	else
-		return (article);
+	return (article);
 }
