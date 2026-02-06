@@ -1,8 +1,8 @@
 const	express = require("express");
 const	app = express();
 
-const	{ errorHandler } = require("./middleware/error-middleware.js");
-const	{ urlNotFound } = require("./middleware/url-not-found.js");
+const	errorHandler = require("./middleware/error-middleware.js");
+const	urlNotFound = require("./middleware/url-not-found.js");
 const	{
 	commentsRouter,
 	articlesRouter,

@@ -1,6 +1,6 @@
 const	{ retrieveAllArticles, retrieveAllArticlesFormatted, retrieveArticleById } = require("../services/articles.service.js");
 const	{ NotFoundError, BadRequestError } = require("../errors/");
-const	{ catchAsyncErrors } = require("../middleware/catch-async-errors.js");
+const	catchAsyncErrors = require("../middleware/catch-async-errors.js");
 
 exports.getAllArticles = catchAsyncErrors(async (request, response, next) =>
 {

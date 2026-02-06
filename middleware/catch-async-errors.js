@@ -7,4 +7,4 @@ const	catchAsyncErrors = (asyncFunction) =>
 		});
 };
 
-exports.catchAsyncErrors = catchAsyncErrors;
+module.exports = catchAsyncErrors;

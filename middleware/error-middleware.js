@@ -5,4 +5,4 @@ const	errorHandler = (err, _request, response, _next) =>
 	response.status(err.statusCode || 500).send( { error : errorMessage } );
 }
 
-exports.errorHandler = errorHandler;
+module.exports = errorHandler;
