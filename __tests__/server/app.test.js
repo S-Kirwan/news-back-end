@@ -47,6 +47,16 @@ describe("/api/topics/", () =>
 			expect(typeof topic.img_url).toBe("string");
 		}
 	});
+	test("DELETE - rejects invalid method (405)", async () =>
+	{
+		const	{ body } = await request(app)
+			.delete("/api/topics")
+			.expect(405);
+
+		const	{ error } = body;
+
+		expect(error).toBe("DELETE invalid method on /api/topics");
+	});
 });
 
 describe("/api/articles/", () =>
@@ -80,11 +90,21 @@ describe("/api/articles/", () =>
 			expect(articleDate >= nextArticleDate).toBe(true);
 		};
 	});
+	test("DELETE - rejects invalid method (405)", async () =>
+	{
+		const	{ body } = await request(app)
+			.delete("/api/articles")
+			.expect(405);
+
+		const	{ error } = body;
+
+		expect(error).toBe("DELETE invalid method on /api/articles");
+	});
 });
 
 describe("/api/users/", () =>
 {
-	test("GET", async () =>
+	test("GET returns valid user body", async () =>
 	{
 		const	{ body } = await request(app)
 			.get("/api/users")
@@ -98,6 +118,16 @@ describe("/api/users/", () =>
 			expect(typeof user.name).toBe("string");
 			expect(typeof user.avatar_url).toBe("string");
 		}
+	});
+	test("DELETE - rejects invalid method (405)", async () =>
+	{
+		const	{ body } = await request(app)
+			.delete("/api/users")
+			.expect(405);
+
+		const	{ error } = body;
+
+		expect(error).toBe("DELETE invalid method on /api/users");
 	});
 });
 

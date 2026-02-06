@@ -1,11 +1,12 @@
 const	express = require("express");
-
-const	{ getAllArticles, getArticleById } = require("../controllers/articles.controller.js");
-
 const	router = express.Router();
 
-router.get("/", getAllArticles);
+const	{ getAllArticles, getArticleById } = require("../controllers/articles.controller.js");
+const	invalidMethod = require("../middleware/invalid-method-middleware.js");
 
-router.get("/:article_id", getArticleById);
+
+router.get("/", getAllArticles).all("/", invalidMethod);
+
+router.get("/:article_id", getArticleById).all("/", invalidMethod);
 
 module.exports = router;

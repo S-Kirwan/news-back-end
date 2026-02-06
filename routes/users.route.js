@@ -1,9 +1,9 @@
 const	express = require("express");
-
-const	getAllUsers = require("../controllers/users.controller.js");
-
 const	router = express.Router();
 
-router.get("/", getAllUsers);
+const	invalidMethod = require("../middleware/invalid-method-middleware.js");
+const	getAllUsers = require("../controllers/users.controller.js");
+
+router.get("/", getAllUsers).all("/", invalidMethod);
 
 module.exports = router;
