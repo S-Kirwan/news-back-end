@@ -1,10 +1,10 @@
 const	{ NotFoundError } = require("../errors/");
 
-const	urlNotFound = (request, _, next) =>
+const	urlNotFound = (request, _response, next) =>
 {
 	const	badUrlError = new NotFoundError(`${request.url} Not Found`);
 
-	next(badUrlError);
+	return (next(badUrlError));
 }
 
 module.exports = urlNotFound;
