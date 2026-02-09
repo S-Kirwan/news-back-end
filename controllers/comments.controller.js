@@ -1,20 +1,62 @@
-const	{ NotFoundError, BadRequestError } = require("../errors/");
-const	retrieveCommentsByArticle = require("../services/comments.service.js");
-const	catchAsyncErrors = require("../middleware/catch-async-errors.js");
+const	{ NotFoundError, BadRequestError, UnprocessableContentError } = require("../errors/");
+const	{ retrieveCommentsByArticle, newCommentToArticle } = require("../services/comments.service.js");
 
-const	getCommentsByArticle = catchAsyncErrors(async (request, response, next) =>
+exports.getCommentsByArticle = async (request, response, next) =>
 {
 	const	articleId = request.params.article_id;
 
 	if (isNaN(Number(articleId)))
-		return (next(new BadRequestError("Bad Request - Invalid article_id")));
+	{
+		next(new BadRequestError("Bad Request - Invalid article_id"));
+		return ;
+	}
 
 	const	comments = await retrieveCommentsByArticle(articleId);
 
-	if (comments[0] === undefined)
-		return (next(new NotFoundError("No comments found")));
+	if (comments === null)
+	{
+		next(new NotFoundError("No comments found"));
+		return ;
+	}
 	else
-		return (response.status(200).send({ comments }));
-});
+	{
+		response.status(200).send({ comments });
+		return ;
+	}
+};
 
-module.exports = getCommentsByArticle;
+exports.postCommentToArticle = async (request, response, next) =>
+{
+	const	articleId = request.params.article_id;
+	const	{ body : comment } = request;
+	const	{ username, body } = comment;
+	
+	if(isNaN(Number(articleId)))
+	{
+		next(new BadRequestError("Bad Request - Invalid article_id"))
+		return ;
+	}
+	if (username === undefined || body === undefined)
+	{
+		next(new UnprocessableContentError("Comments require username & body"));
+		return ;
+	}
+	if (username === "" || body === "")
+	{
+		next(new UnprocessableContentError("Username & body must contain data"));
+		return ;
+	}
+
+	const	insertedComment = await newCommentToArticle(comment, articleId);
+
+	if (insertedComment === null)
+	{
+		next(new NotFoundError());
+		return ;
+	}
+	else
+	{
+		response.status(201).send( { comment : insertedComment } );
+		return ;
+	}
+};

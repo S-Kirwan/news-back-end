@@ -34,9 +34,24 @@ exports.fetchArticleById = async (requestedId) =>
 	const	article = await db.query(
 		`
 			SELECT * FROM articles
-			WHERE article_id = $1
+			WHERE article_id = $1;
 		`, [requestedId]
 	);
 
 	return (article.rows[0]);
+}
+
+exports.doesArticleExist = async (articleId) =>
+{
+	const	article = await db.query(
+		`
+			SELECT * FROM articles
+			WHERE article_id = $1;
+		`, [articleId]
+	);
+
+	if (article.rows[0] === undefined)
+		return (false);
+	else
+		return (true);
 }
