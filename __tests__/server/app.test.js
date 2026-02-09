@@ -59,6 +59,35 @@ describe("/api/topics/", () =>
 	});
 });
 
+describe("/api/users/", () =>
+{
+	test("GET returns valid user body", async () =>
+	{
+		const	{ body } = await request(app)
+			.get("/api/users")
+			.expect(200);
+
+		const	{ users } = body;
+
+		for (let user of users)
+		{
+			expect(typeof user.username).toBe("string");
+			expect(typeof user.name).toBe("string");
+			expect(typeof user.avatar_url).toBe("string");
+		}
+	});
+	test("DELETE - rejects invalid method (405)", async () =>
+	{
+		const	{ body } = await request(app)
+			.delete("/api/users")
+			.expect(405);
+
+		const	{ error } = body;
+
+		expect(error).toBe("DELETE invalid method on /api/users");
+	});
+});
+
 describe("/api/articles/", () =>
 {
 	test("GET", async () =>
@@ -99,35 +128,6 @@ describe("/api/articles/", () =>
 		const	{ error } = body;
 
 		expect(error).toBe("DELETE invalid method on /api/articles");
-	});
-});
-
-describe("/api/users/", () =>
-{
-	test("GET returns valid user body", async () =>
-	{
-		const	{ body } = await request(app)
-			.get("/api/users")
-			.expect(200);
-
-		const	{ users } = body;
-
-		for (let user of users)
-		{
-			expect(typeof user.username).toBe("string");
-			expect(typeof user.name).toBe("string");
-			expect(typeof user.avatar_url).toBe("string");
-		}
-	});
-	test("DELETE - rejects invalid method (405)", async () =>
-	{
-		const	{ body } = await request(app)
-			.delete("/api/users")
-			.expect(405);
-
-		const	{ error } = body;
-
-		expect(error).toBe("DELETE invalid method on /api/users");
 	});
 });
 
@@ -172,5 +172,47 @@ describe("/api/articles/:article_id", () =>
 		const	{ error } = body;
 
 		expect(error).toBe("Bad Request - Invalid article_id");
+	});
+});
+
+describe("/api/articles/:article_id/comments", () =>
+{
+	test("GET, requested article_id exists", async () =>
+	{
+		const	{ body } = await request(app)
+			.get("/api/articles/5/comments")
+			.expect(200);
+
+		const	{ comments } = body;
+
+		for (let comment of comments)
+		{
+			expect(comment.article_id).toBe(5);
+			expect(typeof comment.created_at).toBe("string");
+			expect(typeof comment.comment_id).toBe("number");
+			expect(typeof comment.author).toBe("string");
+			expect(typeof comment.votes).toBe("number");
+			expect(typeof comment.body).toBe("string");
+		};
+	});
+	test("GET, requested article_id has no comments", async () =>
+	{
+		const	{ body } = await request(app)
+			.get("/api/articles/123123/comments")
+			.expect(404);
+
+		const	{ error } = body;
+
+		expect(error).toBe("No comments found")
+	});
+	test("GET, invalid article_id", async () =>
+	{
+		const	{ body } = await request(app)
+			.get("/api/articles/pineapple/comments")
+			.expect(400);
+
+		const	{ error } = body;
+
+		expect(error).toBe("Bad Request - Invalid article_id")
 	});
 });
