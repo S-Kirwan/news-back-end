@@ -1,11 +1,11 @@
-const	catchAsyncErrors = require("../middleware/catch-async-errors.js");
 const	{ retrieveAllUsers } = require("../services/users.service.js");
 
-const	getAllUsers = catchAsyncErrors(async (request, response) =>
+const	getAllUsers = async (request, response) =>
 {
 	const	users = await retrieveAllUsers();
 
-	return (response.status(200).send( { users } ));
-});
+	response.status(200).send( { users } );
+	return ;
+};
 
 module.exports = getAllUsers;

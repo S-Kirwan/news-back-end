@@ -1,25 +1,34 @@
 const	{ retrieveAllArticles, retrieveAllArticlesFormatted, retrieveArticleById } = require("../services/articles.service.js");
 const	{ NotFoundError, BadRequestError } = require("../errors/");
-const	catchAsyncErrors = require("../middleware/catch-async-errors.js");
 
-exports.getAllArticles = catchAsyncErrors(async (request, response, next) =>
+exports.getAllArticles = async (request, response, next) =>
 {
 	const	articles = await retrieveAllArticlesFormatted();
 
-	return (response.status(200).send( { articles } ));
-});
+	response.status(200).send( { articles } );
+	return ;
+};
 
-exports.getArticleById = catchAsyncErrors(async (request, response, next) =>
+exports.getArticleById = async (request, response, next) =>
 {
 	const	requestedId = request.params.article_id;
 	
 	if (isNaN(Number(requestedId)))
-		return (next(new BadRequestError("Bad Request - Invalid article_id")));
+	{
+		next(new BadRequestError("Bad Request - Invalid article_id"));
+		return ;
+	}
 
 	const	article = await retrieveArticleById(requestedId);
 
 	if (article === undefined)
-		return (next(new NotFoundError("article_id not found")));
+	{
+		next(new NotFoundError("article_id not found"));
+		return ;
+	}
 	else
-		return (response.status(200).send( { article } ));
-});
+	{
+		response.status(200).send( { article } );
+		return ;
+	}
+};
