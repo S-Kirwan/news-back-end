@@ -7,7 +7,9 @@ const	errorHandler = (err, _request, response, _next) =>
 	else
 		errorMessage = "Internal Server Error";
 
-	response.status(err.statusCode || 500).send( { error : errorMessage } );
+	const	responseStatus = err.statusCode || 500;
+
+	response.status(responseStatus).send( { error : errorMessage } );
 }
 
 module.exports = errorHandler;
