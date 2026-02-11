@@ -8,8 +8,8 @@ const db = new Pool();
 
 if (!process.env.PGDATABASE) {
     throw new Error("No PGDATABASE configured")
-} else { 
-    console.log(`Connected to ${process.env.PGDATABASE}`)
+} else {
+    // console.log(`Connected to ${process.env.PGDATABASE}`)
 }
 
 
