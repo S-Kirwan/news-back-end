@@ -1,7 +1,11 @@
+const	{ ValidationError } = require("express-validation");
+
 const	errorHandler = (err, _request, response, _next) =>
 {
 	let	errorMessage;
 	
+	if (err instanceof ValidationError)
+		err.statusCode = 422;
 	if (err.statusCode)
 		errorMessage = err.message;
 	else

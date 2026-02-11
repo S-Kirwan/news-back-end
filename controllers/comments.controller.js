@@ -36,16 +36,6 @@ exports.postCommentToArticle = async (request, response, next) =>
 		next(new BadRequestError("Bad Request - Invalid article_id"))
 		return ;
 	}
-	if (username === undefined || body === undefined)
-	{
-		next(new UnprocessableContentError("Comments require username & body"));
-		return ;
-	}
-	if (username === "" || body === "")
-	{
-		next(new UnprocessableContentError("Username & body must contain data"));
-		return ;
-	}
 
 	const	insertedComment = await newCommentToArticle(comment, articleId);
 
