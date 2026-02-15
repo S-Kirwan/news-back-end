@@ -55,3 +55,17 @@ exports.doesArticleExist = async (articleId) =>
 	else
 		return (true);
 }
+
+exports.updateArticleById = async (requestedId, incomingVotes) =>
+{
+	const	article = await db.query(
+		`
+			UPDATE articles
+			SET votes = votes + $1
+			WHERE article_id = $2
+			RETURNING *;
+		`, [incomingVotes, requestedId]
+	)
+
+	return (article.rows[0]);
+}

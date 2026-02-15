@@ -1,4 +1,10 @@
-const	{ fetchAllArticles, fetchAllArticlesFormatted, fetchArticleById } = require("../models/articles.model.js");
+const	{
+	fetchAllArticles,
+	fetchAllArticlesFormatted,
+	fetchArticleById,
+	updateArticleById,
+	doesArticleExist
+} = require("../models/articles.model.js");
 
 exports.retrieveAllArticles = async () =>
 {
@@ -20,7 +26,20 @@ exports.retrieveAllArticlesFormatted = async () =>
 
 exports.retrieveArticleById = async (requestedId) =>
 {
+	if (await doesArticleExist(requestedId) === false)
+		return (null);
+
 	const	article = await fetchArticleById(requestedId);
 
 	return (article);
+}
+
+exports.amendArticleById = async (requestedId, incomingVotes) =>
+{
+	if (await doesArticleExist(requestedId) === false)
+		return (null);
+
+	const	updatedArticle = await updateArticleById(requestedId, incomingVotes);
+
+	return (updatedArticle);
 }

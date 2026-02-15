@@ -7,6 +7,6 @@ const	postCommentSchema =
 			username: Joi.string().required(),
 			body: Joi.string().required()
 		})
-}
+};
 
 module.exports = postCommentSchema;
