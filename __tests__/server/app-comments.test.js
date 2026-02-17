@@ -186,3 +186,55 @@ describe("/api/articles/:article_id/comments", () =>
 		});
 	});
 });
+
+describe("/api/comments/:comment_id", () =>
+{
+	describe("DELETE", () =>
+	{
+		test("valid comment_id", async () =>
+		{
+			const	commentIdToDelete = 5;
+			const	response = await request(app)
+				.delete(`/api/comments/${commentIdToDelete}`)
+				.expect(204);
+
+			// Because there is no endpoint for GET on a specific commentId
+			// we must use the GET request on the entire article's comments,
+			// then check if the comment has been deleted
+			// commentId 5 is in article ID 1 in the test database
+			const	{ body }= await request(app)
+				.get("/api/articles/1/comments")
+				.expect(200);
+
+			const	{ comments } = body;
+			let 	commentDeleted = true;
+
+			for (let comment of comments)
+			{
+				if (comment.comment_id === commentIdToDelete)
+					commentDeleted = false;
+			};
+			expect(commentDeleted).toBe(true);
+		});
+		test("comment_id does not exist", async () =>
+		{
+			const	{ body } = await request(app)
+				.delete("/api/comments/21474")
+				.expect(404);
+
+			const	{ error } = body;
+
+			expect(error).toBe("Not Found");
+		});
+		test("invalid comment_id", async () =>
+		{
+			const	{ body } = await request(app)
+				.delete("/api/comments/razorblade")
+				.expect(400);
+
+			const	{ error } = body;
+
+			expect(error).toBe("Bad Request - Invalid comment_id");
+		});
+	});
+});

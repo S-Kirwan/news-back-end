@@ -1,7 +1,7 @@
-const	{ fetchCommentsByArticle, insertCommentToArticle } = require("../models/comments.model.js");
+const	{ fetchCommentsByArticle, insertCommentToArticle, doesCommentExist, deleteCommentFromDatabase } = require("../models/comments.model.js");
 const	{ doesArticleExist } = require("../models/articles.model.js");
-const	{ UnprocessableContentError, NotFoundError } = require("../errors/");
 const	{ doesUsernameExist } = require("../models/users.model.js");
+const	{ UnprocessableContentError, NotFoundError } = require("../errors/");
 
 exports.retrieveCommentsByArticle = async (articleId) =>
 {
@@ -24,4 +24,14 @@ exports.newCommentToArticle = async (comment, articleId) =>
 	const	insertedComment = await insertCommentToArticle(username, body, articleId);
 
 	return (insertedComment);
+};
+
+exports.removeComment = async (commentId) =>
+{
+	if (await doesCommentExist(commentId) === false)
+		return (null);
+
+	await deleteCommentFromDatabase(commentId);
+	
+	return (true);
 };
