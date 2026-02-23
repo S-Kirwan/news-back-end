@@ -1,4 +1,5 @@
 const	express = require("express");
+const	cors = require("cors");
 const	app = express();
 
 const	errorHandler = require("./middleware/error-middleware.js");
@@ -10,6 +11,8 @@ const
 	topicsRouter,
 	usersRouter
 } = require("./routes");
+
+app.use(cors());
 
 app.use(express.json());
 
