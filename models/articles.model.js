@@ -7,8 +7,12 @@ exports.fetchAllArticles = async () =>
 	return (articles.rows);
 };
 
-exports.fetchAllArticlesFormatted = async () =>
+exports.fetchAllArticlesFormatted = async (sortQuery) =>
 {
+	// The sort_by and order values on this object have already been
+	// verified in the controller to contain exactly valid requests.
+	// Therefore it SHOULD be safe to use the string literal inside this query.
+	// If not, use pg-format
 	const	formattedArticles = await db.query(
 		`
 			SELECT
@@ -19,11 +23,11 @@ exports.fetchAllArticlesFormatted = async () =>
 				articles.created_at,
 				articles.votes,
 				articles.article_img_url,
-				COUNT(comments.comment_id) AS comment_count
+				COUNT(comments.comment_id)::INTEGER AS comment_count
 			FROM articles
 			LEFT JOIN comments ON articles.article_id = comments.article_id
 			GROUP BY articles.article_id
-			ORDER BY articles.created_at;
+			ORDER BY ${sortQuery.sort_by} ${sortQuery.order};
 		`
 	);
 	return (formattedArticles.rows);
