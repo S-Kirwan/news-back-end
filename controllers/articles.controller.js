@@ -94,6 +94,7 @@ exports.getArticleById = async (request, response, next) =>
 
 exports.patchArticleById = async (request, response, next) =>
 {
+	console.log(request.body);
 	const	incomingVotes = request.body.inc_votes;
 	const	requestedId = request.params.article_id;
 
